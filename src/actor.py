@@ -161,6 +161,11 @@ def actor_hp(Actor *self, Actor *bywho, float amount):
         else:
             self->target = bywho
 
+    # auto retaliate if no other target
+    if not self->kind->enemy and bywho and amount < 0:
+        if not self->target and not self->walking:
+            self->target = bywho
+
     if bywho and bywho->kind->id == AT_BAT and amount < 0:
         bywho->hp -= amount / 2
         if bywho->hp > bywho->max_hp:
@@ -231,7 +236,7 @@ def actor_tick(Actor *self):
             if self->kind->projectile == IT_MAGIC_MISSILE:
                 actor_hp(self->target, self, -6)
             if self->kind->projectile == IT_FIREBALL:
-                actor_hp(self->target, self, -10)
+                actor_hp(self->target, self, -5)
             
             self->projectile = False
     

@@ -116,6 +116,12 @@ ActorType *def actor_type_new(int w, h, kind):
     self->level = levels[kind]
     self->initial_hp = 10 * pow(2, (self->level - 1) / 5.0)
     self->initial_damage = pow(2, (self->level - 1) / 5.0)
+
+    # FIXME: levelling isn't implemented right now, so insane damage makes no
+    # sense for low level player
+    if self->initial_damage > 7:
+        self->initial_damage = 7
+    
     self->id = kind
     actor_type[kind] = self
 

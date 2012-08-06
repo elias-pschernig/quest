@@ -13,7 +13,7 @@ global char *main_data_path
 global LandFont *font
 static char *save_path
 
-double scale = 1
+double scale = 2
 
 class Application:
     int w, h

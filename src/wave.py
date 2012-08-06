@@ -5,7 +5,7 @@ static char info[256] = ""
 static int primes[10] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29}
 
 def wave_restart():
-    wave_ticks = 0 #3600 * 6
+    wave_ticks = 0
 
     #actor_new(app->actors, 320, 60, AT_HUNTER)
     #actor_new(app->actors, 340, 60, AT_DOG)
@@ -45,13 +45,11 @@ def wave_tick():
                 actor_new(app->actors, x, y, AT_WOLF)
 
         if wave >= 5 and wave < 9:
-            if s % 20 == 0:
+            if s == 0:
                 actor_new(app->actors, x, y, AT_WOLF)
-            if s % 20 == 1:
-                actor_new(app->actors, x, y, AT_WOLF)
-            if s % 20 == 10:
+            if s == 20:
                 actor_new(app->actors, x, y, AT_BAT)
-            if s % 20 == 11:
+            if s == 40:
                 actor_new(app->actors, x, y, AT_GROLL)
 
         if wave == 1:
@@ -78,19 +76,17 @@ def wave_tick():
 
         if wave == 5:
             if s == 0:
-                actor_new(app->actors, x, y, AT_DRAKE)
-           
+                actor_new(app->actors, x, y, AT_PAPAGROLL)
         if wave == 6:
             if s == 0:
                 actor_new(app->actors, x, y, AT_DRAKE)
+        if wave == 7:
             if s == 1:
                 actor_new(app->actors, x, y, AT_BAT)
             if s == 2:
                 actor_new(app->actors, x, y, AT_BAT)
-           
-        if wave == 7:
-            if s == 0:
-                actor_new(app->actors, x, y, AT_PAPAGROLL)
+            if s == 3:
+                actor_new(app->actors, x, y, AT_BAT)
 
             if s == 20 or s == 40:
                 actor_new(app->actors, x, y, AT_GROLL)
@@ -98,19 +94,15 @@ def wave_tick():
         if wave == 8:
             if s == 0:
                 actor_new(app->actors, x, y, AT_DRAKE)
-            if s == 1:
+            if s == 30:
                 actor_new(app->actors, x, y, AT_DRAKE)
            
         if wave == 9:
-            if s == 0:
+            if s == 50:
                 actor_new(app->actors, 940, 60, AT_DRAGON)
-            if s % 10 == 0:
-                actor_new(app->actors, x, y, AT_WOLF)
-            if s % 10 == 1:
-                actor_new(app->actors, x, y, AT_BAT)
             if s == 5:
-                actor_new(app->actors, x, y, AT_DRAKE)
+                actor_new(app->actors, x, y, AT_PAPAGROLL)
             if s % 10 == 2:
                 actor_new(app->actors, x, y, AT_GROLL)
 
-    wave_ticks++
+    if wave_ticks < 3600 * 10 - 1: wave_ticks++
