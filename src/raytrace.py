@@ -59,7 +59,7 @@ Raytracer *def raytracer_new(int w, h):
     self->w = w
     self->h = h
     self->tiles = land_calloc(w / 8 * h / 8 * sizeof *self->tiles)
-    self->rgba = land_calloc(w / 4 * h / 4 * sizeof *self->rgba)
+    self->rgba = land_malloc(w / 4 * h / 4 * 4 * sizeof *self->rgba)
     return self
 
 def raytracer_add_object(Raytracer *self, Object *o):
@@ -90,9 +90,9 @@ def minmax3(float a, b, c, *vmin, *vmax):
             else:
                 *vmin = c
 
-def raytracer_trace(Raytracer *self, unsigned char *rgba):
+unsigned char *def raytracer_trace(Raytracer *self):
     float *zbuffer = land_calloc(self->w * self->h * sizeof *zbuffer)
-    memset(rgba, 0, self->w * self->h * 4)
+    unsigned char *rgba = land_calloc(self->w * self->h * 4)
 
     for Object *o in LandArray *self->objects:
         object_recalc_normals(o)
@@ -150,7 +150,7 @@ def raytracer_trace(Raytracer *self, unsigned char *rgba):
                 zp += self->w - 8
 
     land_free(zbuffer)
-
+    return rgba
 
 def raytracer_draw_lines(Raytracer *r):
     for Object *o in LandArray *r->objects:

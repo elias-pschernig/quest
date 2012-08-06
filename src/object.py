@@ -74,7 +74,8 @@ Object *def object_sphere(int segments, slices):
 
     return o
 
-Object *def object_cylinder(int segments, bool top, bottom):
+Object *def object_cylinder_segments(int segments, bool top, bottom,
+        int seg0, int seg1):
     Object *o = object_new()
     int slices = 2
     for int i in range(slices):
@@ -89,24 +90,37 @@ Object *def object_cylinder(int segments, bool top, bottom):
         for int j in range(segments):
             int row = i * segments
             int row1 = i * segments + segments
+            if j < seg0 or j >= seg1: continue
             add_quad(o, row + j, row1 + j,
                 row1 + (j + 1) % segments,
                 row + (j + 1) % segments)
 
+    int bn = land_array_count(o->v)
+    add_vertex(o, 0, 0, -1)
+
+    int tn = land_array_count(o->v)
+    add_vertex(o, 0, 0, 1)
+
     if bottom:
-        int n = land_array_count(o->v)
-        add_vertex(o, 0, 0, -1)
+        
         for int j in range(segments):
-            add_triangle(o, j, (j + 1) % segments, n)
+            if j < seg0 or j >= seg1: continue
+            add_triangle(o, j, (j + 1) % segments, bn)
 
     if top:
-        int n = land_array_count(o->v)
-        add_vertex(o, 0, 0, 1)
         int row = (slices - 1) * segments
         for int j in range(segments):
-            add_triangle(o, row + j, n, row + (j + 1) % segments)
+            if j < seg0 or j >= seg1: continue
+            add_triangle(o, row + j, tn, row + (j + 1) % segments)
+
+    if seg0 != 0 or seg1 != segments:
+        add_quad(o, seg0, bn, tn, seg0 + segments)
+        add_quad(o, bn, seg1, seg1 + segments, tn)
 
     return o
+
+Object *def object_cylinder(int segments, bool top, bottom):
+    return object_cylinder_segments(segments, top, bottom, 0, segments)
 
 Object *def object_cone(int segments, bool bottom):
     Object *o = object_new()
@@ -145,6 +159,19 @@ Object *def object_box():
     add_quad(o, 0, 2, 6, 4)
     add_quad(o, 0, 4, 5, 1)
     add_quad(o, 5, 4, 6, 7)
+    return o
+
+Object *def object_pyramid():
+    Object *o = object_new()
+    for int y in range(2):
+        for int x in range(2):
+            add_vertex(o, x * 2 - 1, y * 2 - 1, -1)
+    add_vertex(o, 0, 0, 1)
+    add_quad(o, 0, 1, 3, 2)
+    add_triangle(o, 1, 0, 4)
+    add_triangle(o, 3, 1, 4)
+    add_triangle(o, 2, 3, 4)
+    add_triangle(o, 0, 2, 4)
     return o
 
 Object *def object_triangle(LandVector a, b, c):
