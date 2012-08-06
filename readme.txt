@@ -55,7 +55,7 @@ healer: Can heal her target. Her special heals all allies fully.
 knight: Melee fighter. His special draws everyones attention to him.
 
 mage: Shoots devastating magic missiles. Her special does massive damage to
-    all allies.
+    all enemies.
 
 wolf: (prime level 2) Mostly harmless.
 
